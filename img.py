@@ -1,0 +1,71 @@
+from PIL import Image
+
+def get_img_data(filepath, brightness = 0.05):
+    try:
+        img = Image.open(filepath)
+        
+        width, height = img.size
+        
+        pixel_data = list(img.getdata())
+        new_pixel_data = [pixel_data[i*width:(i+1)*width] for i in range(height)]
+        
+        pixel_data_three = []
+        colorlist = []
+        for row in new_pixel_data:
+            arr = []
+            for pixel in row:
+                npx = alpha_to_rgb(pixel, brightness) if img.mode == 'RGBA' else pixel
+                if npx not in colorlist:
+                    arr.append(len(colorlist))
+                    colorlist.append(npx)
+                else:
+                    arr.append(colorlist.index(npx))
+            pixel_data_three.append(arr)
+        
+        return pixel_data_three, colorlist
+        
+    except FileNotFoundError:
+        print(f'File not found :(\nXbox controlrer')
+    except Exception as e:
+        print(f'An error occurred idk what :skull:\nXbox controlrer')
+
+def alpha_to_rgb(color, brightness):
+    r, g, b, a = color
+    r = int((r * a * brightness) // 255)
+    g = int((g * a * brightness) // 255)
+    b = int((b * a * brightness) // 255)
+    return (r, g, b)
+
+def generate_py_code(colorids, colorlist, boardinput = 15):
+    if boardinput < 0 or boardinput > 28: return
+    
+    workaround = '{pixelstrip.MATRIX_COLUMN_MAJOR, pixelstrip.MATRIX_ZIGZAG}'
+    
+    return f'''import pixelstrip
+import board
+
+imgdata = {colorids}
+colorlist = {colorlist}
+
+pixel = pixelstrip.PixelStrip(board.GP{boardinput}, width=8, height=8, bpp=4, pixel_order=pixelstrip.GRB, 
+                        options={workaround})
+
+pixel.timeout = 0.0
+
+pixel.clear()
+for i in range(len(imgdata)):
+    for j in range(len(imgdata)):
+        pixel[i, 7-j] = colorlist[imgdata[i][j]]
+pixel.show()
+'''
+
+
+if __name__ == "__main__":
+    pixeldata, collist = get_img_data(input("Filepath of image to show:\n"), float(input("Brightness (out of 1):\n")))
+
+    code = generate_py_code(pixeldata, collist, 15)
+
+    filepath = input("Path to python script:\n")
+    with open(filepath, "w") as file:
+        file.write(code)
+        print(f'Written to {filepath} :D')
