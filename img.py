@@ -1,5 +1,7 @@
 from PIL import Image
 
+# Looks at image and collects its height, width, and pixel data, then fills the colorlist list with all the colors used in the image.
+# What do try and except do?
 def get_img_data(filepath, brightness = 0.05):
     try:
         img = Image.open(filepath)
@@ -29,6 +31,8 @@ def get_img_data(filepath, brightness = 0.05):
     except Exception as e:
         print(f'An error occurred idk what :skull:\nXbox controlrer')
 
+
+# applies the alpha (brightness) to the colors to put RGBA to output an RGB value.
 def alpha_to_rgb(color, brightness):
     r, g, b, a = color
     r = int((r * a * brightness) // 255)
@@ -36,6 +40,8 @@ def alpha_to_rgb(color, brightness):
     b = int((b * a * brightness) // 255)
     return (r, g, b)
 
+
+# Generates the code that puts ther image onto the lights
 def generate_py_code(colorids, colorlist, boardinput = 15):
     if boardinput < 0 or boardinput > 28: return
     
@@ -59,7 +65,7 @@ for i in range(len(imgdata)):
 pixel.show()
 '''
 
-
+# do we need to specify brighness or can we just have that set to a relatively dim value?
 if __name__ == "__main__":
     pixeldata, collist = get_img_data(input("Filepath of image to show:\n"), float(input("Brightness (out of 1):\n")))
 

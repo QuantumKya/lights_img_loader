@@ -21,6 +21,7 @@ def get_gif_data(filepath, brightness = 0.05):
         for col in cl:
             if col not in true_colorlist: true_colorlist.append(col)
             else: 
+                pass
         
 
 
