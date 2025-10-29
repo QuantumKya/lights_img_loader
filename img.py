@@ -13,10 +13,10 @@ def get_img_data(filepath, brightness = 0.05):
         
         pixel_data_three = []
         colorlist = []
-        # goes through rows first starting at the top and working down?
+        # goes through rows first starting at the top and working down? yes
         for row in new_pixel_data:
             arr = []
-            # Pixel in selected row. Goes from left to right?
+            # Pixel in selected row. Goes from left to right? yes
             for pixel in row:
                 npx = alpha_to_rgb(pixel, brightness) if img.mode == 'RGBA' else pixel
                 if npx not in colorlist:
@@ -43,7 +43,7 @@ def alpha_to_rgb(color, brightness):
     return (r, g, b)
 
 
-# Generates the code that puts ther image onto the lights
+# Generates the code that puts the image onto the lights
 def generate_py_code(colorids, colorlist, boardinput = 15):
     if boardinput < 0 or boardinput > 28: return
     
@@ -59,7 +59,7 @@ import board
 imgdata = {colorids}
 colorlist = {colorlist}
 
-pixel = pixelstrip.PixelStrip(board.GP{boardinput}, width=8, height=8, bpp=4, pixel_order=pixelstrip.GRB, 
+pixel = pixelstrip.PixelStrip(board.GP{boardinput}, width={len(colorids[0][0])}, height={len(colorids[0])}, bpp=4, pixel_order=pixelstrip.GRB, 
                         options={workaround})
 
 pixel.timeout = 0.0
