@@ -11,8 +11,10 @@ def get_img_data(img, brightness = 0.05):
         
         pixel_data_three = []
         colorlist = []
+        # goes through rows first starting at the top and working down? yes
         for row in new_pixel_data:
             arr = []
+            # Pixel in selected row. Goes from left to right? yes
             for pixel in row:
                 npx = alpha_to_rgb(pixel, brightness) if img.mode == 'RGBA' else pixel
                 if npx not in colorlist:
@@ -48,13 +50,17 @@ def generate_py_code(colorids, colorlist, boardinput = 15):
     
     workaround = '{pixelstrip.MATRIX_COLUMN_MAJOR, pixelstrip.MATRIX_ZIGZAG}'
     
+
+# When defining the pixel variable, you say the width and height should be 8. 
+# We should replace those with the width and height variables that we made earlier 
+# so that this can scale more easily to different sized pixelstrips.
     return f'''import pixelstrip
 import board
 
 imgdata = {colorids}
 colorlist = {colorlist}
 
-pixel = pixelstrip.PixelStrip(board.GP{boardinput}, width=8, height=8, bpp=4, pixel_order=pixelstrip.GRB, 
+pixel = pixelstrip.PixelStrip(board.GP{boardinput}, width={len(colorids[0][0])}, height={len(colorids[0])}, bpp=4, pixel_order=pixelstrip.GRB, 
                         options={workaround})
 
 pixel.timeout = 0.0
