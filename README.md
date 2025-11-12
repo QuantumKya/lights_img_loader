@@ -1,5 +1,6 @@
 # Image Loader for Lights
 ## Quickly and easily load custom images and gifs onto the pixelstrip lights!
+## Quickly and easily load custom images and gifs onto the pixelstrip lights!
 Made by Einar S. and Rohan V-F.
 For FRC Team 3407 Wild Cards.
 
